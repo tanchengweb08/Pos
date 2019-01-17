@@ -1,0 +1,73 @@
+const express=require("express");
+const cors=require("cors");
+var app=express();
+app.use(cors({
+    origin:["http://localhost:8080","http://127.0.0.1:8080"]
+}))
+app.listen(3000,function(){
+    console.log("服务器已开启");
+});
+
+app.use(express.static(__dirname+"/public"));
+app.get("/oftenProducts",(req,res)=>{
+    var obj=[
+        {id:1,product:"BBQ手撕猪肉堡",price:22},
+        {id:2,product:"波纹薯条",price:7},
+        {id:3,product:"香辣鸡腿堡",price:25},
+        {id:4,product:"冲绳海盐冰淇淋",price:12},
+        {id:5,product:"香辣鸡翅",price:12},
+        {id:6,product:"新奥尔良烤翅",price:8},
+        {id:7,product:"红石榴风味派",price:6},
+        {id:8,product:"拿铁豆浆",price:15},
+        {id:9,product:"烤翅套餐A",price:40},
+    ];
+    res.send(obj);
+});
+app.get("/productsList",(req,res)=>{
+    var obj=[
+        [
+            {id:1,img_url:"http://127.0.0.1:3000/img/Pos_cookProducts_01.jpg",pname:"新奥尔良鸡腿堡",price:23},
+            {id:2,img_url:"http://127.0.0.1:3000/img/Pos_cookProducts_02.jpg",pname:"香辣鸡腿堡",price:25},
+            {id:3,img_url:"http://127.0.0.1:3000/img/Pos_cookProducts_03.jpg",pname:"伴鸡伴虾堡",price:27},
+            {id:4,img_url:"http://127.0.0.1:3000/img/Pos_cookProducts_04.jpg",pname:"BBQ手撕猪肉堡",price:22},
+            {id:5,img_url:"http://127.0.0.1:3000/img/Pos_cookProducts_05.jpg",pname:"培根烤鸡腿堡",price:25},
+            {id:6,img_url:"http://127.0.0.1:3000/img/Pos_cookProducts_06.jpg",pname:"劲脆鸡腿堡",price:20},
+        ],
+        [
+            {id:1,img_url:"http://127.0.0.1:3000/img/Pos_snackProducts_01.jpg",pname:"冲绳海盐冰淇淋",price:12},
+            {id:2,img_url:"http://127.0.0.1:3000/img/Pos_snackProducts_02.jpg",pname:"珍宝糯米翅",price:15},
+            {id:3,img_url:"http://127.0.0.1:3000/img/Pos_snackProducts_03.jpg",pname:"干贝大虾粥",price:13},
+            {id:4,img_url:"http://127.0.0.1:3000/img/Pos_snackProducts_04.jpg",pname:"特色饭团",price:18},
+            {id:5,img_url:"http://127.0.0.1:3000/img/Pos_snackProducts_05.jpg",pname:"黄桃多多蛋挞",price:8},
+            {id:6,img_url:"http://127.0.0.1:3000/img/Pos_snackProducts_06.jpg",pname:"猫山王榴莲蛋挞",price:9},
+            {id:7,img_url:"http://127.0.0.1:3000/img/Pos_snackProducts_07.jpg",pname:"芒果冰淇淋花筒",price:11},
+            {id:8,img_url:"http://127.0.0.1:3000/img/Pos_snackProducts_08.jpg",pname:"藤椒肯大大鸡腿",price:14},
+            {id:9,img_url:"http://127.0.0.1:3000/img/Pos_snackProducts_09.jpg",pname:"吮指原味鸡块",price:8},
+            {id:10,img_url:"http://127.0.0.1:3000/img/Pos_snackProducts_10.jpg",pname:"红石榴风味派",price:6},
+            {id:11,img_url:"http://127.0.0.1:3000/img/Pos_snackProducts_11.jpg",pname:"黄金鸡块",price:12},
+            {id:12,img_url:"http://127.0.0.1:3000/img/Pos_snackProducts_12.jpg",pname:"波纹薯条",price:7},
+            {id:13,img_url:"http://127.0.0.1:3000/img/Pos_snackProducts_13.jpg",pname:"骨肉相连",price:9},
+            {id:14,img_url:"http://127.0.0.1:3000/img/Pos_snackProducts_14.jpg",pname:"新奥尔良烤翅",price:13},
+            {id:15,img_url:"http://127.0.0.1:3000/img/Pos_snackProducts_15.jpg",pname:"香辣鸡翅",price:12},
+            {id:16,img_url:"http://127.0.0.1:3000/img/Pos_snackProducts_16.jpg",pname:"双色鸡米花",price:15}
+        ],
+        [
+            {id:1,img_url:"http://127.0.0.1:3000/img/Pos_drinkProducts_01.jpg",pname:"盐津青梅爽",price:12},
+            {id:2,img_url:"http://127.0.0.1:3000/img/Pos_drinkProducts_02.jpg",pname:"热柠檬红茶",price:10},
+            {id:3,img_url:"http://127.0.0.1:3000/img/Pos_drinkProducts_03.jpg",pname:"焦糖布雷拿铁",price:20},
+            {id:4,img_url:"http://127.0.0.1:3000/img/Pos_drinkProducts_04.jpg",pname:"青金桔鲜果茶",price:13},
+            {id:5,img_url:"http://127.0.0.1:3000/img/Pos_drinkProducts_05.jpg",pname:"拿铁豆浆",price:15},
+            {id:6,img_url:"http://127.0.0.1:3000/img/Pos_drinkProducts_06.jpg",pname:"诚心橙意咖啡",price:16},
+            {id:7,img_url:"http://127.0.0.1:3000/img/Pos_drinkProducts_07.jpg",pname:"纯纯玉米饮",price:11},
+            {id:8,img_url:"http://127.0.0.1:3000/img/Pos_drinkProducts_08.jpg",pname:"橙子水果茶",price:12},
+        ],
+        [
+            {id:1,img_url:"http://127.0.0.1:3000/img/Pos_mealProducts_01.jpg",pname:"烤翅套餐A",price:40},
+            {id:2,img_url:"http://127.0.0.1:3000/img/Pos_mealProducts_02.jpg",pname:"小吃套餐",price:25},
+            {id:3,img_url:"http://127.0.0.1:3000/img/Pos_mealProducts_03.jpg",pname:"烤翅套餐B",price:40},
+            {id:4,img_url:"http://127.0.0.1:3000/img/Pos_mealProducts_04.jpg",pname:"烤翅套餐C",price:40},
+            {id:5,img_url:"http://127.0.0.1:3000/img/Pos_mealProducts_05.jpg",pname:"烤翅套餐D",price:40},
+        ]
+    ];
+    res.send(obj);
+});
