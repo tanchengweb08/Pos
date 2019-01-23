@@ -34,9 +34,9 @@
                     <div class="often-product-title">常用商品</div>
                     <div class="often-product-list">
                         <ul>
-                            <li v-for="product of oftenProducts">
-                                <span>{{product.product}}</span>
-                                <span class="often-product-price">￥{{(product.price).toFixed(2)}}元</span>
+                            <li v-for="products of oftenProducts" @click="addOrderList(products)">
+                                <span>{{products.pname}}</span>
+                                <span class="often-product-price">￥{{(products.price).toFixed(2)}}元</span>
                             </li>
                         </ul>
                     </div>
@@ -46,7 +46,7 @@
                         <el-tab-pane label="汉堡" >
                             <div class="cookProducts">
                                 <ul>
-                                    <li v-for="products of cookProducts">
+                                    <li v-for="products of cookProducts" @click="addOrderList(products)">
                                         <span><img :src="products.img_url"/></span>
                                         <span class="cookProducts-title">{{products.pname}}</span>
                                         <span class="cookProducts-price">￥{{(products.price).toFixed(2)}}元</span>
@@ -57,7 +57,7 @@
                         <el-tab-pane label="小吃">
                             <div class="cookProducts">
                                 <ul>
-                                    <li v-for="products of snackProducts">
+                                    <li v-for="products of snackProducts" @click="addOrderList(products)">
                                         <span><img :src="products.img_url"/></span>
                                         <span class="cookProducts-title">{{products.pname}}</span>
                                         <span class="cookProducts-price">￥{{(products.price).toFixed(2)}}元</span>
@@ -68,7 +68,7 @@
                         <el-tab-pane label="饮料">
                             <div class="cookProducts">
                                 <ul>
-                                    <li v-for="products of drinkProducts">
+                                    <li v-for="products of drinkProducts" @click="addOrderList(products)">
                                         <span><img :src="products.img_url"/></span>
                                         <span class="cookProducts-title">{{products.pname}}</span>
                                         <span class="cookProducts-price">￥{{(products.price).toFixed(2)}}元</span>
@@ -79,7 +79,7 @@
                         <el-tab-pane label="套餐">
                             <div class="cookProducts">
                                 <ul>
-                                    <li v-for="products of mealProducts">
+                                    <li v-for="products of mealProducts" @click="addOrderList(products)">
                                         <span><img :src="products.img_url"></span>
                                         <span class="cookProducts-title">{{products.pname}}</span>
                                         <span class="cookProducts-price">￥{{(products.price).toFixed(2)}}元</span>
@@ -98,11 +98,7 @@
     export default{
         data(){
             return{
-                products:[
-                    {product:"BBQ手撕猪肉堡",count:"2",price:22},
-                    {product:"波纹薯条",count:"2",price:7},
-                    {product:"香辣鸡腿堡",count:"1",price:25}
-                ],
+                products:[],
                 oftenProducts:[],
                 cookProducts:[],
                 snackProducts:[],
@@ -134,6 +130,28 @@
                 this.drinkProducts=res.data[2]
                 this.mealProducts=res.data[3]
             })
+        },
+        methods: {
+            addOrderList(products){
+                let isHave=false;
+                //商品是否已经存在于订单列表中
+                for(let i=0;i<this.products.length;i++){
+                    if(this.products[i].id==products.id){
+                        isHave=true;
+                    }
+                }
+                //根据判断的值编写业务逻辑
+                //如果列表中有商品
+                if(isHave){
+                    //改变列表中商品的数量
+                    let arr = this.products.filter(a=>a.id == products.id);
+                    arr[0].count++;
+                    //如果列表中没有这个商品
+                }else{
+                    let newproducts={id:products.id,product:products.pname,price:products.price,count:1};
+                    this.products.push(newproducts);
+                }
+            }
         },
     }
 </script>
