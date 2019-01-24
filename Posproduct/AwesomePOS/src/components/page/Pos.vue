@@ -10,15 +10,18 @@
                             <el-table-column prop="price" label="商品金额"></el-table-column>
                             <el-table-column  label="操作" fixed="right">
                                 <template  slot-scope="scope">
-                                    <el-button type="text" size="small">增加</el-button>
-                                    <el-button type="text" size="small">删除</el-button>
+                                    <el-button type="text" size="small"  @click="addOrderList(scope.row)">增加</el-button>
+                                    <el-button type="text" size="small" @click="delProducts(scope.row)">删除</el-button>
                                 </template>
                             </el-table-column>
                         </el-table>
+                        <div class="totalDiv">
+                            数量：{{totalCount}}&nbsp;&nbsp;&nbsp;&nbsp;金额：{{totalMoney}}
+                        </div>
                         <div class="order-btn">
                             <el-button type="warning">挂单</el-button>
-                            <el-button type="danger">删除</el-button>
-                            <el-button type="success">结账</el-button>
+                            <el-button type="danger" @click="delAllProducts()">删除</el-button>
+                            <el-button type="success" @click="checkout()">结账</el-button>
                         </div>
                     </el-tab-pane>
                     <el-tab-pane label="挂单">
@@ -103,7 +106,9 @@
                 cookProducts:[],
                 snackProducts:[],
                 drinkProducts:[],
-                mealProducts:[]
+                mealProducts:[],
+                totalCount:0,
+                totalMoney:0
             } 
         },
         name:"pos",
@@ -117,6 +122,7 @@
         mounted(){
             var orderHeight=document.body.clientHeight;
             document.getElementById("order-list").style.height=orderHeight+"px";
+            
         },
         created() {
             var url="http://127.0.0.1:3000/oftenProducts";
@@ -131,25 +137,77 @@
                 this.mealProducts=res.data[3]
             })
         },
+        
         methods: {
-            addOrderList(products){
+            addOrderList(goods){
+                //数量和金额清零
+                console.log(goods);
+                this.totalCount=0;
+                this.totalMoney=0;
                 let isHave=false;
                 //商品是否已经存在于订单列表中
+                console.log(123);
                 for(let i=0;i<this.products.length;i++){
-                    if(this.products[i].id==products.id){
+                    if(this.products[i].id == goods.id){
                         isHave=true;
                     }
                 }
+                console.log(234)
                 //根据判断的值编写业务逻辑
                 //如果列表中有商品
                 if(isHave){
                     //改变列表中商品的数量
-                    let arr = this.products.filter(a=>a.id == products.id);
+                    let arr = this.products.filter(a=>a.id == goods.id);
                     arr[0].count++;
                     //如果列表中没有这个商品
                 }else{
-                    let newproducts={id:products.id,product:products.pname,price:products.price,count:1};
+                    let newproducts={id:goods.id,product:goods.pname,price:goods.price,count:1};
                     this.products.push(newproducts);
+                }
+                //计算汇总的数量和金额
+                for(var i=0;i<this.products.length;i++){
+                    this.totalCount+=this.products[i].count;
+                    this.totalMoney=this.totalMoney+(this.products[i].price*this.products[i].count);
+                }
+            },
+            //删除商品
+            delProducts(goods){
+                this.products=this.products.filter(a=>a.id != goods.id);
+                this. getAll();
+            },
+            //汇总
+            getAll(){
+                this.totalCount=0;
+                this.totalMoney=0;
+                if(this.products){
+                    //计算汇总的数量和金额
+                for(var i=0;i<this.products.length;i++){
+                    this.totalCount+=this.products[i].count;
+                    this.totalMoney=this.totalMoney+(this.products[i].price*this.products[i].count);
+                }
+                }
+            },
+            //删除所有商品
+            delAllProducts(){
+                this.totalCount=0;
+                this.totalMoney=0;
+                this.products=[];
+            },
+            //结账
+            checkout(){
+                if(this.totalCount!=0){
+                    this.totalCount=0;
+                    this.totalMoney=0;
+                    this.products=[];
+                    this.$message({
+                        message:"结账成功!",
+                        type:"success"
+                    })
+                }else{
+                    this.$message({
+                        message:"操作错误!",
+                        type:"error"
+                    })
                 }
             }
         },
@@ -178,6 +236,7 @@
         padding: 10px;
         margin: 10px;
         background-color:#fff;
+        cursor: pointer;
     }
     .products-type{
         clear:both;
@@ -193,6 +252,7 @@
         margin: 2px;
         padding: 2px;
         height:140px; 
+        cursor: pointer;
     }
     
     .cookProducts>ul>li>span{
@@ -216,5 +276,8 @@
         padding-left:20px;
         padding-top:30px;
     }
-    
+    .totalDiv{
+        border-bottom: 1px solid #d3dce6;
+        padding: 10px;
+    }
 </style>
